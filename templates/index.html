@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product — The last tool you'll ever need</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f9fafb;
+      color: #111827;
+    }
+
+    /* NAV */
+    nav {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo { font-weight: 700; font-size: 1.25rem; letter-spacing: -0.5px; }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links a {
+      text-decoration: none;
+      color: #6b7280;
+      font-size: 0.9rem;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: #111827; }
+    .nav-cta {
+      background: #4f46e5;
+      color: #fff !important;
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    .nav-cta:hover { background: #4338ca; color: #fff !important; }
+
+    /* TABS */
+    .tabs-bar {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+    }
+    .tab-btn {
+      padding: 1rem 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #6b7280;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab-btn:hover { color: #111827; }
+    .tab-btn.active { color: #4f46e5; border-bottom-color: #4f46e5; }
+
+    /* CONTENT */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
+
+    /* OVERVIEW */
+    .hero { text-align: center; padding: 4rem 2rem; }
+    .hero h1 { font-size: 3rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
+    .hero p { font-size: 1.15rem; color: #6b7280; max-width: 520px; margin: 0 auto 2rem; }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: #4f46e5; color: #fff; padding: 0.75rem 1.75rem;
+      border-radius: 8px; font-weight: 600; font-size: 0.95rem;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .btn-primary:hover { background: #4338ca; }
+    .btn-secondary {
+      background: #fff; color: #374151; padding: 0.75rem 1.75rem;
+      border-radius: 8px; font-weight: 600; font-size: 0.95rem;
+      text-decoration: none; border: 1px solid #d1d5db; transition: border-color 0.15s;
+    }
+    .btn-secondary:hover { border-color: #9ca3af; }
+
+    .stats { display: flex; gap: 2rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 800; color: #4f46e5; }
+    .stat-label { font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; }
+
+    /* FEATURES */
+    .section-header { text-align: center; margin-bottom: 3rem; }
+    .section-header h2 { font-size: 2rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .section-header p { color: #6b7280; max-width: 480px; margin: 0 auto; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .feature-card {
+      background: #fff; border: 1px solid #e5e7eb;
+      border-radius: 12px; padding: 1.5rem;
+      transition: box-shadow 0.2s;
+    }
+    .feature-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .feature-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+    .feature-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .feature-card p { font-size: 0.875rem; color: #6b7280; line-height: 1.6; }
+
+    /* PRICING */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+    .pricing-card {
+      background: #fff; border: 1px solid #e5e7eb;
+      border-radius: 12px; padding: 2rem; position: relative;
+    }
+    .pricing-card.popular {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 1px #4f46e5;
+    }
+    .badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: #4f46e5; color: #fff; font-size: 0.7rem; font-weight: 700;
+      padding: 0.25rem 0.75rem; border-radius: 99px; letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .plan-name { font-size: 0.875rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; }
+    .plan-price { font-size: 2.5rem; font-weight: 800; margin: 0.5rem 0 0.25rem; }
+    .plan-price span { font-size: 1rem; font-weight: 400; color: #6b7280; }
+    .plan-desc { font-size: 0.875rem; color: #6b7280; margin-bottom: 1.5rem; }
+    .plan-features { list-style: none; margin-bottom: 1.75rem; }
+    .plan-features li {
+      font-size: 0.875rem; padding: 0.35rem 0;
+      display: flex; align-items: center; gap: 0.5rem; color: #374151;
+    }
+    .plan-features li::before { content: "✓"; color: #4f46e5; font-weight: 700; }
+    .btn-plan {
+      display: block; text-align: center; padding: 0.65rem 1rem;
+      border-radius: 8px; font-weight: 600; font-size: 0.875rem;
+      text-decoration: none; transition: all 0.15s;
+    }
+    .btn-plan-outline {
+      border: 1px solid #d1d5db; color: #374151;
+    }
+    .btn-plan-outline:hover { border-color: #4f46e5; color: #4f46e5; }
+    .btn-plan-filled { background: #4f46e5; color: #fff; }
+    .btn-plan-filled:hover { background: #4338ca; }
+
+    /* REVIEWS */
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .review-card {
+      background: #fff; border: 1px solid #e5e7eb;
+      border-radius: 12px; padding: 1.5rem;
+    }
+    .stars { color: #f59e0b; font-size: 1rem; margin-bottom: 0.75rem; }
+    .review-text { font-size: 0.9rem; color: #374151; line-height: 1.6; margin-bottom: 1.25rem; }
+    .reviewer { display: flex; align-items: center; gap: 0.75rem; }
+    .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #4f46e5; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.875rem; flex-shrink: 0;
+    }
+    .reviewer-name { font-size: 0.875rem; font-weight: 600; }
+    .reviewer-role { font-size: 0.75rem; color: #6b7280; }
+
+    /* FOOTER */
+    footer {
+      background: #fff; border-top: 1px solid #e5e7eb;
+      text-align: center; padding: 1.5rem;
+      font-size: 0.8rem; color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Product</div>
+  <div class="nav-links">
+    <a href="#" onclick="switchTab('overview'); return false;">Home</a>
+    <a href="#" onclick="switchTab('features'); return false;">Features</a>
+    <a href="#" onclick="switchTab('pricing'); return false;">Pricing</a>
+    <a class="nav-cta" href="#" onclick="switchTab('pricing'); return false;">Get started</a>
+  </div>
+</nav>
+
+<div class="tabs-bar">
+  <button class="tab-btn active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
+  <button class="tab-btn" data-tab="features" onclick="switchTab('features')">Features</button>
+  <button class="tab-btn" data-tab="pricing" onclick="switchTab('pricing')">Pricing</button>
+  <button class="tab-btn" data-tab="reviews" onclick="switchTab('reviews')">Reviews</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="tab-overview" class="tab-panel active">
+  <div class="hero">
+    <h1>The last tool<br>you'll ever need</h1>
+    <p>Product helps teams ship faster, stay aligned, and actually enjoy the process. Simple by design. Powerful by default.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary" onclick="switchTab('pricing'); return false;">Start for free</a>
+      <a href="#" class="btn-secondary" onclick="switchTab('features'); return false;">See features</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">12k+</div><div class="stat-label">Teams using Product</div></div>
+      <div class="stat"><div class="stat-num">99.9%</div><div class="stat-label">Uptime SLA</div></div>
+      <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">Average rating</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div id="tab-features" class="tab-panel">
+  <div class="container">
+    <div class="section-header">
+      <h2>Everything you need</h2>
+      <p>Built for modern teams who move fast and don't have time for complexity.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Blazing fast</h3>
+        <p>Sub-100ms response times globally. Your users never wait, no matter where they are.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Secure by default</h3>
+        <p>End-to-end encryption, SSO, and fine-grained permissions out of the box. No extra config needed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h3>Connects to everything</h3>
+        <p>200+ native integrations including Slack, GitHub, Jira, and your existing stack.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Real-time analytics</h3>
+        <p>Understand what's happening as it happens. Dashboards that actually tell you something useful.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI-assisted workflows</h3>
+        <p>Let the model handle the repetitive parts. You focus on the work that actually matters.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌍</div>
+        <h3>Global infrastructure</h3>
+        <p>Deployed across 12 regions. Your data stays where you need it to, with full compliance controls.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div id="tab-pricing" class="tab-panel">
+  <div class="container">
+    <div class="section-header">
+      <h2>Simple, honest pricing</h2>
+      <p>No hidden fees. No surprise bills. Cancel any time.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0 <span>/ month</span></div>
+        <div class="plan-desc">For individuals and small experiments.</div>
+        <ul class="plan-features">
+          <li>Up to 3 projects</li>
+          <li>1 team member</li>
+          <li>Basic analytics</li>
+          <li>Community support</li>
+        </ul>
+        <a href="#" class="btn-plan btn-plan-outline">Get started free</a>
+      </div>
+      <div class="pricing-card popular">
+        <div class="badge">Most popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$29 <span>/ month</span></div>
+        <div class="plan-desc">For growing teams shipping real products.</div>
+        <ul class="plan-features">
+          <li>Unlimited projects</li>
+          <li>Up to 10 members</li>
+          <li>Advanced analytics</li>
+          <li>Priority support</li>
+          <li>All integrations</li>
+        </ul>
+        <a href="#" class="btn-plan btn-plan-filled">Start free trial</a>
+      </div>
+      <div class="pricing-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">Custom</div>
+        <div class="plan-desc">For large teams with serious requirements.</div>
+        <ul class="plan-features">
+          <li>Unlimited everything</li>
+          <li>SSO &amp; SAML</li>
+          <li>SLA guarantee</li>
+          <li>Dedicated support</li>
+          <li>Custom contracts</li>
+        </ul>
+        <a href="#" class="btn-plan btn-plan-outline">Contact sales</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEWS -->
+<div id="tab-reviews" class="tab-panel">
+  <div class="container">
+    <div class="section-header">
+      <h2>Loved by teams everywhere</h2>
+      <p>Don't take our word for it.</p>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"We cut our deployment time in half within the first week. I genuinely can't imagine going back to how we worked before."</p>
+        <div class="reviewer">
+          <div class="avatar">S</div>
+          <div>
+            <div class="reviewer-name">Sarah K.</div>
+            <div class="reviewer-role">Engineering Lead at Volta</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"The integrations actually work. That sounds like a low bar, but after trying four other tools, it's everything."</p>
+        <div class="reviewer">
+          <div class="avatar">M</div>
+          <div>
+            <div class="reviewer-name">Marcus T.</div>
+            <div class="reviewer-role">CTO at Fielder</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Our non-technical team members were up and running in an afternoon. The learning curve is basically nonexistent."</p>
+        <div class="reviewer">
+          <div class="avatar">A</div>
+          <div>
+            <div class="reviewer-name">Aiko R.</div>
+            <div class="reviewer-role">Product Manager at Drift</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2026 Product Inc. · Built to test <a href="https://github.com/milesmcc/shynet" style="color:#4f46e5;">Shynet</a> analytics.
+</footer>
+
+<script>
+  function switchTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+    document.getElementById('tab-' + name).classList.add('active');
+    document.querySelector('[data-tab="' + name + '"]').classList.add('active');
+
+    // Update URL hash without scrolling
+    history.replaceState(null, '', '#' + name);
+
+    // Tell Shynet this is a new pageview
+    if (window.Shynet) Shynet.newPageLoad();
+  }
+
+  // Restore tab from hash on load
+  const hash = window.location.hash.replace('#', '');
+  if (['overview', 'features', 'pricing', 'reviews'].includes(hash)) {
+    switchTab(hash);
+  }
+</script>
+
+{% if shynet_script_url %}
+<noscript>
+  <img src="{{ shynet_script_url | replace('script.js', 'pixel.gif') }}" />
+</noscript>
+<script defer src="{{ shynet_script_url }}"></script>
+{% endif %}
+
+</body>
+</html>
